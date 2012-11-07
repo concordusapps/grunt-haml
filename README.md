@@ -55,7 +55,3 @@ haml: {
   },
 }
 ```
-
---
-
-*Task submitted by [Eric Woroshow](https://github.com/errcw).*
