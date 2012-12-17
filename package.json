@@ -25,9 +25,10 @@
   },
   "dependencies": {
     "haml-coffee": ">= 1.7.0",
-    "grunt-lib-contrib": "~0.3.0"
+    "grunt-contrib-lib": "0.3.x"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "haml"
   ]
 }
