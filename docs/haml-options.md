@@ -90,7 +90,7 @@ haml: {
 The resultant template would be something like this:
 
 ```javascript
-define(['jquery', 'underscore', 'path/to/other'], ($, _, other) {
+define(['jquery', 'underscore', 'path/to/other'], function($, _, other) {
     // template code
 });
 ```

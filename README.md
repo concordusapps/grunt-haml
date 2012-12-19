@@ -113,7 +113,7 @@ haml: {
 The resultant template would be something like this:
 
 ```javascript
-define(['jquery', 'underscore', 'path/to/other'], ($, _, other) {
+define(['jquery', 'underscore', 'path/to/other'], function($, _, other) {
     // template code
 });
 ```
@@ -164,4 +164,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Dec 19 2012 03:50:59.*
+*This file was generated on Wed Dec 19 2012 03:51:49.*
