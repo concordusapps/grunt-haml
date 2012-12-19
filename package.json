@@ -27,11 +27,11 @@
     "node": "0.8.x"
   },
   "dependencies": {
-    "grunt-lib-contrib": "0.4.x"
-  },
-  "devDependencies": {
+    "grunt-lib-contrib": "0.4.x",
     "haml": "0.4.x",
     "haml-coffee": "1.8.x",
+  },
+  "devDependencies": {
     "grunt-contrib-jshint": "0.1.x",
     "grunt-contrib-nodeunit": "0.1.x",
     "grunt-contrib-clean": "0.4.x",
