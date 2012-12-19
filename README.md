@@ -156,6 +156,7 @@ haml: {
 
 ## Release History
 
+ * 2012-12-18   v0.1.3   Updated README.
  * 2012-12-18   v0.1.2   Fixed package.json syntax error.
  * 2012-12-18   v0.1.1   Fixed package.json dependencies.
  * 2012-12-18   v0.1.0   Rewrite from scratch (referencing grunt-contrib). Support for full gamut of options.
@@ -166,4 +167,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Dec 19 2012 04:15:46.*
+*This file was generated on Wed Dec 19 2012 04:19:20.*
