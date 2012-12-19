@@ -68,10 +68,6 @@ Default: basename without extension of the input HAML file
 Specifies the name to store the compiled HAML template as in the object
 specified by `namespace`.
 
-*Defined only for target == 'js' and placement == 'global'.*
-
-##### Example
-
 With a `name` of 'apple' and a namespace of `this._template`, you'd get
 something like this:
 
@@ -81,6 +77,8 @@ window.HAML['apple'] =  function(locals) {
 };
 ```
 
+*Defined only for target == 'js' and placement == 'global'.*
+
 #### dependencies
 Type: ```object```
 Default: ```{}```
@@ -88,10 +86,6 @@ Default: ```{}```
 Specifies any module dependencies of the HAML file that must be loaded via
 the AMD define statement. These are automatically appended to if there are
 any `require` statements in the HAML code.
-
-*Defined only for target == 'js'.*
-
-##### Example
 
 With the following HAML file:
 
@@ -123,6 +117,8 @@ define(['jquery', 'underscore', 'path/to/other'], ($, _, other) {
     // template code
 });
 ```
+
+*Defined only for target == 'js'.*
 
 #### bare
 Type: ```boolean```
@@ -168,4 +164,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Dec 19 2012 03:49:33.*
+*This file was generated on Wed Dec 19 2012 03:50:59.*
