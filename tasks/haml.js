@@ -167,8 +167,6 @@ module.exports = function(grunt) {
           'source language for HAML; choices are: coffee and js\n');
       }
 
-      // return 'YODEL';
-      // return require('coffee-script').compile(output, options);
     } catch (e) {
       grunt.log.error(e);
       grunt.fail.warn('Haml failed to compile.');
