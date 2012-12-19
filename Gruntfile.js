@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     haml: {
       'coffee_js': {
-        options: { placement: 'global' },
+        options: { language: 'coffee', placement: 'global' },
         files: {
           'tmp/coffee_js/haml.js': 'test/fixtures/coffee/coffee1.haml',
           'tmp/coffee_js/concat.js': [
@@ -41,6 +41,7 @@ module.exports = function(grunt) {
       },
       'coffee_js_amd': {
         options: {
+          language: 'coffee',
           dependencies: {
             '$': 'jquery',
             '_': 'underscore'
@@ -56,6 +57,7 @@ module.exports = function(grunt) {
       },
       'coffee_html': {
         options: {
+          language: 'coffee',
           target: 'html',
           context: {
             'greet': 'Morgan Freeman',
@@ -71,7 +73,7 @@ module.exports = function(grunt) {
         }
       },
       'js_js': {
-        options: { placement: 'global', language: 'js' },
+        options: { placement: 'global' },
         files: {
           'tmp/js_js/haml.js': 'test/fixtures/js/js1.haml',
           'tmp/js_js/concat.js': [
@@ -82,7 +84,6 @@ module.exports = function(grunt) {
       },
       'js_js_amd': {
         options: {
-          language: 'js',
           placement: 'amd',
           dependencies: {
             '$': 'jquery',
@@ -99,7 +100,6 @@ module.exports = function(grunt) {
       },
       'js_html': {
         options: {
-          language: 'js',
           target: 'html',
           context: {
             length: 321,

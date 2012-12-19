@@ -45,7 +45,7 @@ module.exports = function(grunt) {
       target: 'js',
 
       // Default language choice to coffee-script and haml-coffee.
-      language: 'coffee',
+      language: 'js',
 
       // Default placement; either `amd` or `global`.
       placement: 'amd',
