@@ -1,7 +1,7 @@
 {
   "name": "grunt-contrib-haml",
   "description": "Compile Haml files to JavaScript.",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "homepage": "https://github.com/concordusapps/grunt-contrib-haml",
   "author": {
     "name": "Concordus Applications"
@@ -20,12 +20,23 @@
     }
   ],
   "main": "tasks/haml.js",
+  "scripts": {
+    "test": "grunt test"
+  },
   "engines": {
     "node": "0.8.x"
   },
   "dependencies": {
-    "haml-coffee": ">= 1.7.0",
-    "grunt-contrib-lib": "0.3.x"
+    "grunt-lib-contrib": "0.4.x"
+  },
+  "devDependencies": {
+    "haml": "0.4.x",
+    "haml-coffee": "1.8.x",
+    "grunt-contrib-jshint": "0.1.x",
+    "grunt-contrib-nodeunit": "0.1.x",
+    "grunt-contrib-clean": "0.4.x",
+    "grunt-contrib-internal": "0.1.x",
+    "grunt": "0.4.x"
   },
   "keywords": [
     "gruntplugin",
