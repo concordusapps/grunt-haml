@@ -48,7 +48,7 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'tmp/coffee_js_amd/haml.js': 'test/fixtures/coffee/coffee1.haml',
+          'tmp/coffee_js_amd/haml.js': 'test/fixtures/coffee/coffee3.haml',
           'tmp/coffee_js_amd/concat.js': [
             'test/fixtures/coffee/coffee1.haml',
             'test/fixtures/coffee/coffee2.haml'
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'tmp/js_js_amd/haml.js': 'test/fixtures/js/js1.haml',
+          'tmp/js_js_amd/haml.js': 'test/fixtures/js/js3.haml',
           'tmp/js_js_amd/concat.js': [
             'test/fixtures/js/js1.haml',
             'test/fixtures/js/js2.haml'
