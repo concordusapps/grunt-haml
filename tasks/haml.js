@@ -65,6 +65,7 @@ module.exports = function(grunt) {
       var language = options.language;
       var target = options.target;
       var context = options.context;
+      var output = null;
 
       var template = options.name;
       if (template === undefined) {
@@ -83,7 +84,7 @@ module.exports = function(grunt) {
         var haml = require('haml');
 
         // First pass; generate the javascript method.
-        var output = haml(input);
+        output = haml(input);
 
         if (target === 'html') {
           // Evaluate method with the context and return it.
@@ -145,10 +146,10 @@ module.exports = function(grunt) {
 
         case 'html':
           // Pass it off to haml-coffee to render a template in javascript.
-          var output = hamlc.compile(input, options);
+          output = hamlc.compile(input, options);
 
           // Now we render it as HTML with the given context.
-          return eval(output)(context);
+          return output(context);
 
         default:
           grunt.fail.warn(
@@ -156,6 +157,9 @@ module.exports = function(grunt) {
             'destination target for `haml-coffee`; choices ' +
             'are: html and js\n');
         }
+
+        // Shouldn't be able to get here -- but just in case.
+        break;
 
       default:
         grunt.fail.warn(
