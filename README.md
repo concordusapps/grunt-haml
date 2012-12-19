@@ -1,6 +1,6 @@
-# grunt-contrib-haml [![Build Status](https://secure.travis-ci.org/concordusapps/grunt-contrib-haml.png?branch=master)](http://travis-ci.org/concordusapps/grunt-contrib-haml)
+# grunt-contrib-haml [![Build Status](https://secure.travis-ci.org/gruntjs/grunt-contrib-haml.png?branch=master)](http://travis-ci.org/gruntjs/grunt-contrib-haml)
 
-> Compile Haml files.
+> Compile Haml files to JavaScript.
 
 
 ## Getting Started
@@ -156,6 +156,8 @@ haml: {
 
 ## Release History
 
+ * 2012-12-18   v0.1.2   Fixed package.json syntax error.
+ * 2012-12-18   v0.1.1   Fixed package.json dependencies.
  * 2012-12-18   v0.1.0   Rewrite from scratch (referencing grunt-contrib). Support for full gamut of options.
  * 2012-12-16   v0.0.2   Fixed a syntax error in the package.json (missing comma).
  * 2012-11-06   v0.0.1   Initial release; only slightly modified from what `grunt-contrib-coffee` was at the time.
@@ -164,4 +166,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Dec 19 2012 03:51:49.*
+*This file was generated on Wed Dec 19 2012 04:15:46.*
