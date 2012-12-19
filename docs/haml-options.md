@@ -1,8 +1,110 @@
 # Options
 
+## language
+Type: ```string```
+Default: ```js```
+
+Specifies the script language and compiler to use alongside HAML.
+
+Accepts following values: ```coffee``` or ```js``` in which it will use
+[haml-coffee][] or [haml-js][] respectively.
+
+[haml-coffee]: https://github.com/netzpirat/haml-coffee
+[haml-js]: https://github.com/creationix/haml-js
+
+## target
+Type: ```string```
+Default: ```js```
+
+Specifies the target language to compile to.
+
+Accepts the following values: ```js``` or ```html```. For ```js``` the template
+is generated and for ```html``` the template is both generated and rendered
+into its resultant HTML.
+
+## placement
+Type: ```string```
+Default: ```global```
+
+Specifies where to place the resultant template
+
+*Defined only for target == 'js'.*
+
+## namespace
+Type: ```string```
+Default: ```window.HAML```
+
+Specifies the global object to store the compiled HAML templates in.
+
+*Defined only for target == 'js' and placement == 'global'.*
+
+## name
+Type: ```string```
+Default: basename without extension of the input HAML file
+
+Specifies the name to store the compiled HAML template as in the object
+specified by `namespace`.
+
+*Defined only for target == 'js' and placement == 'global'.*
+
+### Example
+
+With a `name` of 'apple' and a namespace of `this._template`, you'd get
+something like this:
+
+```javascript
+window.HAML['apple'] =  function(locals) {
+    // template code
+};
+```
+
+## dependencies
+Type: ```object```
+Default: ```{}```
+
+Specifies any module dependencies of the HAML file that must be loaded via
+the AMD define statement. These are automatically appended to if there are
+any `require` statements in the HAML code.
+
+*Defined only for target == 'js'.*
+
+### Example
+
+With the following HAML file:
+
+```haml
+!= require('path/to/other')()
+%p Hello World
+```
+
+And the following options (in the `Gruntfile.js`):
+
+```javascript
+haml: {
+  compile: {
+    files: // ...
+    options: {
+      dependencies: {
+        $: 'jquery',
+        _: 'underscore'
+      }
+    }
+  }
+}
+```
+
+The resultant template would be something like this:
+
+```javascript
+define(['jquery', 'underscore', 'path/to/other'], ($, _, other) {
+    // template code
+});
+```
+
 ## bare
 Type: ```boolean```
+Default: ```true```
 
 Compile the JavaScript without the top-level function safety wrapper.
 
-*Defined only for target == 'coffee'.*
+*Defined only for language == 'coffee' and target == 'js'.*

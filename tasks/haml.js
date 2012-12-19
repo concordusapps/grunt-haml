@@ -109,6 +109,15 @@ module.exports = function(grunt) {
           break;
 
         case 'amd':
+          // Search for additional dependencies
+          var lookup = /require.*?\(.*?["'](.*)["'].*?\)/g;
+          var extra = lookup.exec(input);
+          while (extra !== null) {
+            var base = path.basename(extra[1]);
+            options.dependencies[base] = extra[1];
+            extra = lookup.exec(input);
+          }
+
           // Build define statement.
           var defineStatement = 'define([';
           var modules = _(options.dependencies).values();
