@@ -8,72 +8,163 @@
 module.exports = function(grunt) {
   'use strict';
 
-  // TODO: ditch this when grunt v0.4 is released
-  grunt.util = grunt.util || grunt.utils;
+  var path = require('path');
+  var _    = grunt.util._;
 
-  grunt.registerMultiTask('haml', 'Compile Haml files into JavaScript', function() {
-    var path = require('path');
+  grunt.registerMultiTask('haml', 'Compile Haml files', function() {
+    var helpers = require('grunt-lib-contrib').init(grunt);
+    var options = helpers.options(this);
 
-    var helpers = require('grunt-contrib-lib').init(grunt);
-
-    var options = helpers.options(this, {
-      basePath: false
-    });
-
+    // Write options iff verbose.
     grunt.verbose.writeflags(options, 'Options');
 
-    // TODO: ditch this when grunt v0.4 is released
-    this.files = this.files || helpers.normalizeMultiTaskFiles(this.data, this.target);
+    // Ensure we have files to compile.
+    if (this.file.src.length === 0) {
+      grunt.log.writeln('Unable to compile; no valid files were found.');
+      return;
+    }
 
-    var basePath;
-    var newFileDest;
-
-    var srcFiles;
-    var srcCompiled;
-    var taskOutput;
-
-    this.files.forEach(function(file) {
-      file.dest = path.normalize(file.dest);
-      srcFiles = grunt.file.expandFiles(file.src);
-
-      if (srcFiles.length === 0) {
-        grunt.log.writeln('Unable to compile; no valid source files were found.');
-        return;
-      }
-
-      taskOutput = [];
-
-      srcFiles.forEach(function(srcFile) {
-        srcCompiled = compileHaml(srcFile, options);
-
-        if (helpers.isIndividualDest(file.dest)) {
-          basePath = helpers.findBasePath(srcFiles, options.basePath);
-          newFileDest = helpers.buildIndividualDest(file.dest, srcFile, basePath, options.flatten);
-
-          grunt.file.write(newFileDest, srcCompiled || '');
-          grunt.log.writeln('File ' + newFileDest.cyan + ' created.');
-        } else {
-          taskOutput.push(srcCompiled);
-        }
-      });
-
-      if (taskOutput.length > 0) {
-        grunt.file.write(file.dest, taskOutput.join('\n') || '');
-        grunt.log.writeln('File ' + file.dest.cyan + ' created.');
-      }
+    // Compile each file; concatenating them into the source if desired.
+    var output = [];
+    this.file.src.forEach(function(file) {
+      output.push(transpile(file, options));
     });
+
+    // If we managed to get anything; let the world know.
+    if (output.length > 0) {
+      grunt.file.write(this.file.dest, output.join('\n') || '');
+      grunt.log.writeln('File ' + this.file.dest.cyan + ' created.');
+    }
   });
 
-  var compileHaml = function(srcFile, options) {
-    options = grunt.util._.extend({filename: srcFile}, options);
-    delete options.basePath;
-    delete options.flatten;
+  var transpile = function(name, options) {
+    // Construct appropriate options to pass to the compiler
+    options = _({filename: name}).extend(options);
+    options = _(options).defaults({
+      // Default target is javascript.
+      target: 'js',
 
-    var srcCode = grunt.file.read(srcFile);
+      // Default language choice to coffee-script and haml-coffee.
+      language: 'coffee',
+
+      // Default placement; either `amd` or `global`.
+      placement: 'amd',
+
+      // Default global placement namespace to `window`.
+      namespace: 'window.HAML',
+
+      // Default hash of dependencies for AMD.
+      dependencies: {}
+    });
+
+    // Read in the file
+    var input = grunt.file.read(name);
 
     try {
-      var hamlc = require('haml-coffee');
-      return hamlc.template(srcCode, 'haml', 'this._template', options);
+      // Store the desired language.
+      var language = options.language;
+      var target = options.target;
+      var context = options.context;
+
+      var template = options.name;
+      if (template === undefined) {
+        // Default template name is the basename w/o the extension.
+        template = path.basename(name, path.extname(name));
+      }
+
+      // Remove options not understood by any compiler.
+      delete options.language;
+      delete options.target;
+      delete options.name;
+      delete options.context;
+
+      switch (language) {
+      case 'js':
+        var haml = require('haml');
+
+        // First pass; generate the javascript method.
+        var output = haml(input);
+
+        if (target === 'html') {
+          // Evaluate method with the context and return it.
+          return output(context);
+        } else if (target !== 'js') {
+          grunt.fail.warn(
+            'Target ' + target + ' is not a valid ' +
+            'destination target for `haml-coffee`; choices ' +
+            'are: html and js\n');
+        }
+
+        // Reduce to a true annoymous, unnamed method.
+        // TODO: Push this upstream.
+        output = output.toString().substring(27);
+        output = 'function(locals)' + output;
+
+        switch (options.placement) {
+        case 'global':
+          // Set in the desired namespace.
+          output = options.namespace + "['" + template + "'] = " + output;
+          output = '\n' + output + '\n';
+          break;
+
+        case 'amd':
+          // Build define statement.
+          var defineStatement = 'define([';
+          var modules = _(options.dependencies).values();
+          modules = modules.length ? "'" + modules.join("','") + "'" : "";
+          defineStatement += modules;
+          defineStatement += '], function(';
+          defineStatement += _(options.dependencies).keys().join(',');
+          defineStatement += ') { \n';
+
+          // Wrap ouptut in it.
+          output = defineStatement + 'return ' + output + ';\n});\n';
+          break;
+
+        default:
+          grunt.fail.warn(
+            'Placement ' + options.placement + ' is not a valid ' +
+            'destination placement for `haml-js`; choices ' +
+            'are: amd and global\n');
+        }
+
+        // Return the final template.
+        return output;
+
+      case 'coffee':
+        var hamlc = require('haml-coffee');
+        var namespace = options.namespace;
+
+        // Remove options not understood by the compiler.
+        delete options.namespace;
+
+        switch (target) {
+        case 'js':
+          // Pass it off to haml-coffee to render a template in javascript.
+          return hamlc.template(input, template, namespace, options);
+
+        case 'html':
+          // Pass it off to haml-coffee to render a template in javascript.
+          var output = hamlc.compile(input, options);
+
+          // Now we render it as HTML with the given context.
+          return eval(output)(context);
+
+        default:
+          grunt.fail.warn(
+            'Target ' + target + ' is not a valid ' +
+            'destination target for `haml-coffee`; choices ' +
+            'are: html and js\n');
+        }
+
+      default:
+        grunt.fail.warn(
+          'Language ' + language + ' is not a valid ' +
+          'source language for HAML; choices are: coffee and js\n');
+      }
+
+      // return 'YODEL';
+      // return require('coffee-script').compile(output, options);
     } catch (e) {
       grunt.log.error(e);
       grunt.fail.warn('Haml failed to compile.');
