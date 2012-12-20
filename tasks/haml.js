@@ -42,7 +42,7 @@ module.exports = function(grunt) {
     options = _({filename: name}).extend(options);
     options = _(options).defaults({
       // Default target is javascript.
-      target: 'js',
+      target: 'html',
 
       // Default language choice to coffee-script and haml-coffee.
       language: 'js',
