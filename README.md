@@ -72,7 +72,7 @@ With a `name` of 'apple' and a namespace of `this._template`, you'd get
 something like this:
 
 ```javascript
-window.HAML['apple'] =  function(locals) {
+this._template['apple'] =  function(locals) {
     // template code
 };
 ```
