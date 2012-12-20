@@ -14,7 +14,7 @@ Accepts following values: ```coffee``` or ```js``` in which it will use
 
 ## target
 Type: ```string```
-Default: ```js```
+Default: ```html```
 
 Specifies the target language to compile to.
 
