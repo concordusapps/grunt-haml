@@ -1,4 +1,4 @@
-# grunt-contrib-haml [![Build Status](https://secure.travis-ci.org/gruntjs/grunt-contrib-haml.png?branch=master)](http://travis-ci.org/gruntjs/grunt-contrib-haml)
+# grunt-haml [![Build Status](https://secure.travis-ci.org/concordusapps/grunt-haml.png?branch=master)](http://travis-ci.org/concordusapps/grunt-haml)
 
 > Compile Haml files to JavaScript.
 
@@ -7,7 +7,7 @@
 If you haven't used [grunt][] before, be sure to check out the [Getting Started][] guide, as it explains how to create a [gruntfile][Getting Started] as well as install and use grunt plugins. Once you're familiar with that process, install this plugin with this command:
 
 ```shell
-npm install grunt-contrib-haml --save-dev
+npm install grunt-haml --save-dev
 ```
 
 [grunt]: http://gruntjs.com/
@@ -37,7 +37,7 @@ Accepts following values: ```coffee``` or ```js``` in which it will use
 
 #### target
 Type: ```string```
-Default: ```js```
+Default: ```html```
 
 Specifies the target language to compile to.
 
@@ -156,6 +156,7 @@ haml: {
 
 ## Release History
 
+ * 2012-12-19   v0.3.0   Name changed to `grunt-haml` Default target changed to `html`
  * 2012-12-18   v0.1.3   Updated README.
  * 2012-12-18   v0.1.2   Fixed package.json syntax error.
  * 2012-12-18   v0.1.1   Fixed package.json dependencies.
@@ -167,4 +168,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Dec 19 2012 04:19:20.*
+*This file was generated on Thu Dec 20 2012 09:54:33.*
