@@ -18,23 +18,26 @@ module.exports = function(grunt) {
     // Write options iff verbose.
     grunt.verbose.writeflags(options, 'Options');
 
-    // Ensure we have files to compile.
-    if (this.file.src.length === 0) {
-      grunt.log.writeln('Unable to compile; no valid files were found.');
-      return;
-    }
+    // Iterate through files.
+    this.files.forEach(function(file) {
+      // Ensure we have files to compile.
+      if (file.src.length === 0) {
+        grunt.log.writeln('Unable to compile; no valid files were found.');
+        return;
+      }
 
-    // Compile each file; concatenating them into the source if desired.
-    var output = [];
-    this.file.src.forEach(function(file) {
-      output.push(transpile(file, options));
+      // Compile each file; concatenating them into the source if desired.
+      var output = [];
+      file.src.forEach(function(file) {
+        output.push(transpile(file, options));
+      });
+
+      // If we managed to get anything; let the world know.
+      if (output.length > 0) {
+        grunt.file.write(file.dest, output.join('\n') || '');
+        grunt.log.writeln('File ' + file.dest.cyan + ' created.');
+      }
     });
-
-    // If we managed to get anything; let the world know.
-    if (output.length > 0) {
-      grunt.file.write(this.file.dest, output.join('\n') || '');
-      grunt.log.writeln('File ' + this.file.dest.cyan + ' created.');
-    }
   });
 
   var transpile = function(name, options) {

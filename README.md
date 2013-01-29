@@ -1,4 +1,4 @@
-# grunt-haml [![Build Status](https://secure.travis-ci.org/concordusapps/grunt-haml.png?branch=master)](http://travis-ci.org/concordusapps/grunt-haml)
+# grunt-haml [![Build Status](https://secure.travis-ci.org/gruntjs/grunt-haml.png?branch=master)](http://travis-ci.org/gruntjs/grunt-haml)
 
 > Compile Haml files to JavaScript.
 
@@ -156,6 +156,7 @@ haml: {
 
 ## Release History
 
+ * 2013-01-27   v0.3.1   Update to current version of grunt.
  * 2012-12-19   v0.3.0   Name changed to `grunt-haml` Default target changed to `html`
  * 2012-12-18   v0.1.3   Updated README.
  * 2012-12-18   v0.1.2   Fixed package.json syntax error.
@@ -168,4 +169,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Thu Dec 20 2012 09:54:33.*
+*This file was generated on Mon Jan 28 2013 23:23:38.*

@@ -1,4 +1,4 @@
-define(['jquery','underscore'], function($,_) { 
+define(['jquery','underscore','templates/path/to'], function($,_,to) { 
 return function(locals){
 function html_escape(text) {
     return (text + "").
@@ -17,7 +17,7 @@ with(locals || {}) {
 };
 });
 
-define(['jquery','underscore'], function($,_) { 
+define(['jquery','underscore','templates/path/to'], function($,_,to) { 
 return function(locals){
 function html_escape(text) {
     return (text + "").
