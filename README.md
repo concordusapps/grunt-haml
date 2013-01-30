@@ -1,4 +1,4 @@
-# grunt-haml [![Build Status](https://secure.travis-ci.org/gruntjs/grunt-haml.png?branch=master)](http://travis-ci.org/gruntjs/grunt-haml)
+# grunt-haml [![Build Status](https://secure.travis-ci.org/concordusapps/grunt-haml.png?branch=master)](http://travis-ci.org/gruntjs/grunt-haml)
 
 > Compile Haml files to JavaScript.
 
