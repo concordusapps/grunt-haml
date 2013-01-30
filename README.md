@@ -49,7 +49,12 @@ into its resultant HTML.
 Type: ```string```
 Default: ```global```
 
-Specifies where to place the resultant template
+Specifies where to place the resultant template. 
+
+Accepts the following values: ```amd``` or ```global```, For ```global``` the
+template is precompiled and stored in a global namespaced variable. For 
+```amd``` the template is wrapped in an ```amd``` define statement and declared
+as an anonumous module.
 
 *Defined only for target == 'js'.*
 
