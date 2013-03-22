@@ -51,7 +51,7 @@ module.exports = function(grunt) {
       language: 'js',
 
       // Default placement; either `amd` or `global`.
-      placement: 'amd',
+      placement: 'global',
 
       // Default global placement namespace to `window`.
       namespace: 'window.HAML',

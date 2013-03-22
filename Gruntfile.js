@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     haml: {
       'coffee_js': {
-        options: { target: 'js', language: 'coffee', placement: 'global' },
+        options: { target: 'js', language: 'coffee' },
         files: {
           'tmp/coffee_js/haml.js': 'test/fixtures/coffee/coffee1.haml',
           'tmp/coffee_js/concat.js': [
@@ -43,6 +43,7 @@ module.exports = function(grunt) {
         options: {
           target: 'js',
           language: 'coffee',
+          placement: 'amd',
           dependencies: {
             '$': 'jquery',
             '_': 'underscore'
@@ -73,7 +74,7 @@ module.exports = function(grunt) {
         }
       },
       'js_js': {
-        options: { target: 'js', placement: 'global' },
+        options: { target: 'js' },
         files: {
           'tmp/js_js/haml.js': 'test/fixtures/js/js1.haml',
           'tmp/js_js/concat.js': [

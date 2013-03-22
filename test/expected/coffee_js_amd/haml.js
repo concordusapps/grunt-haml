@@ -1,10 +1,11 @@
 (function() {
-
   define(['jquery', 'underscore', 'templates/path/to'], function($, _, to) {
     return function(context) {
       var render;
+
       render = function() {
         var $c, $e, $o;
+
         $e = function(text, escape) {
           return ("" + text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/\//g, '&#47;').replace(/"/g, '&quot;');
         };
