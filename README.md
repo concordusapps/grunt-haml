@@ -1,4 +1,4 @@
-# grunt-haml [![Build Status](https://secure.travis-ci.org/concordusapps/grunt-haml.png?branch=master)](http://travis-ci.org/concordusapps/grunt-haml)
+# grunt-haml [![Build Status](https://secure.travis-ci.org/gruntjs/grunt-haml.png?branch=master)](http://travis-ci.org/concordusapps/grunt-haml)
 
 > Compile Haml files to JavaScript.
 
@@ -11,7 +11,7 @@ npm install grunt-haml --save-dev
 ```
 
 [grunt]: http://gruntjs.com/
-[Getting Started]: https://github.com/gruntjs/grunt/blob/devel/docs/getting_started.md
+[Getting Started]: http://gruntjs.com/getting-started
 
 
 ## Haml task
@@ -49,12 +49,7 @@ into its resultant HTML.
 Type: ```string```
 Default: ```global```
 
-Specifies where to place the resultant template.
-
-Accepts the following values: ```amd``` or ```global```, For ```global``` the
-template is precompiled and stored in a global namespaced variable. For
-```amd``` the template is wrapped in an ```amd``` define statement and declared
-as an anonumous module.
+Specifies where to place the resultant template
 
 *Defined only for target == 'js'.*
 
@@ -77,7 +72,7 @@ With a `name` of 'apple' and a namespace of `this._template`, you'd get
 something like this:
 
 ```javascript
-this._template['apple'] = function(locals) {
+window.HAML['apple'] =  function(locals) {
     // template code
 };
 ```
@@ -161,6 +156,7 @@ haml: {
 
 ## Release History
 
+ * 2013-03-21   v0.3.2   Corrected placement option to match readme.
  * 2013-01-27   v0.3.1   Update to current version of grunt.
  * 2012-12-19   v0.3.0   Name changed to `grunt-haml` Default target changed to `html`
  * 2012-12-18   v0.1.3   Updated README.
@@ -174,4 +170,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Mon Jan 28 2013 23:23:38.*
+*This file was generated on Fri Mar 22 2013 15:55:32.*
