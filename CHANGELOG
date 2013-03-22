@@ -1,3 +1,8 @@
+v0.3.2:
+  date: 2013-03-22
+  changes:
+    - Corrected placement option to match readme.
+
 v0.3.1:
   date: 2013-01-28
   changes:
