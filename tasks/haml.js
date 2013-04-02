@@ -20,6 +20,14 @@ module.exports = function(grunt) {
 
     // Iterate through files.
     this.files.forEach(function(file) {
+      var validFiles = file.src.filter(function(path) {
+        if (!grunt.file.exists(path)) {
+          grunt.log.warn('Source file "' + path + '" not found.');
+          return false;
+        } else {
+          return true;
+        }
+      });
       // Ensure we have files to compile.
       if (file.src.length === 0) {
         grunt.log.writeln('Unable to compile; no valid files were found.');
