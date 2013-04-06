@@ -12,10 +12,8 @@ module.exports = function(grunt) {
   var _    = grunt.util._;
 
   grunt.registerMultiTask('haml', 'Compile Haml files', function() {
-    var helpers = require('grunt-lib-contrib').init(grunt);
-    var defaultOptions = helpers.options(this);
-    // Set up some defaults for the options.
-    _.defaults(defaultOptions, {
+    // Set the target options with some defaults.
+    var options = this.options({
       // Default target is javascript.
       target: 'html',
 
@@ -31,9 +29,6 @@ module.exports = function(grunt) {
       // Default hash of dependencies for AMD.
       dependencies: {}
     });
-
-    // Set the target options.
-    var options = this.options(defaultOptions);
 
     // Write options iff verbose.
     grunt.verbose.writeflags(options, 'Options');
@@ -55,8 +50,7 @@ module.exports = function(grunt) {
       if (validFiles.length > 0) {
         // Transpile each file.
         var output = validFiles.map(function (filename) {
-          // Pass in a copy so we don't mutate the original target options.
-          return transpile(filename, _.cloneDeep(options));
+          return transpile(filename, options);
         });
         // Write the new file.
         grunt.file.write(file.dest, output.join('\n'));
@@ -67,7 +61,10 @@ module.exports = function(grunt) {
     });
   });
 
-  var transpile = function(name, options) {
+  var transpile = function(name, opts) {
+    // Construct appropriate options to pass to the compiler
+    // Create a new object so we do not mutate the target options.
+    var options = _.extend({filename: name}, opts);
     // Read in the file
     options.input = grunt.file.read(name);
 
