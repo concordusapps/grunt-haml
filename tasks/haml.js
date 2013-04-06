@@ -20,31 +20,30 @@ module.exports = function(grunt) {
 
     // Iterate through files.
     this.files.forEach(function(file) {
+      // Get only files that are actually there.
       var validFiles = file.src.filter(function(path) {
-        if (!grunt.file.exists(path)) {
+        if (grunt.file.exists(path)) {
+          return true;
+        } else {
           grunt.log.warn('Source file "' + path + '" not found.');
           return false;
-        } else {
-          return true;
         }
       });
+
       // Ensure we have files to compile.
-      if (file.src.length === 0) {
+      if (validFiles.length === 0) {
         grunt.log.writeln('Unable to compile; no valid files were found.');
         return;
       }
 
-      // Compile each file; concatenating them into the source if desired.
-      var output = [];
-      file.src.forEach(function(file) {
-        output.push(transpile(file, options));
+      // Read each valid file and transpile it.
+      var output = validFiles.map(function (source) {
+        return transpile(grunt.file.read(source, options));
       });
 
-      // If we managed to get anything; let the world know.
-      if (output.length > 0) {
-        grunt.file.write(file.dest, output.join('\n') || '');
-        grunt.log.writeln('File ' + file.dest.cyan + ' created.');
-      }
+      // Write the new file.
+      grunt.file.write(file.dest, output.join('\n'));
+      grunt.log.writeln('File ' + file.dest.cyan + ' created.');
     });
   });
 
