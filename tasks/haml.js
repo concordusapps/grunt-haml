@@ -55,7 +55,8 @@ module.exports = function(grunt) {
       if (validFiles.length > 0) {
         // Transpile each file.
         var output = validFiles.map(function (filename) {
-          return transpile(filename, options);
+          // Pass in a copy so we don't mutate the original target options.
+          return transpile(filename, _.cloneDeep(options));
         });
         // Write the new file.
         grunt.file.write(file.dest, output.join('\n'));
@@ -66,44 +67,25 @@ module.exports = function(grunt) {
     });
   });
 
-  var transpile = function(name, opts) {
-    // Construct appropriate options to pass to the compiler
-    // Create a new object so we do not mutate the target options.
-    var options = _.extend({filename: name}, opts);
+  var transpile = function(name, options) {
+    // Read in the file
+    options.input = grunt.file.read(name);
 
-    // Store the desired language.
-    var language = options.language;
-    var target = options.target;
-    var context = options.context;
-    var output = null;
-
-    var template = options.name;
-    if (template === undefined) {
+    // Ensure we have a template name.
+    if (options.name === undefined) {
       // Default template name is the basename w/o the extension.
-      template = path.basename(name, path.extname(name));
+      options.name = path.basename(name, path.extname(name));
     }
 
-    // // Remove options not understood by any compiler.
-    // delete options.language;
-    // delete options.target;
-    // delete options.name;
-    // delete options.context;
-
-    // Read in the file
-    var input = grunt.file.read(name);
-    options.input = input;
-    options.template = template;
-
     try {
-      switch (language) {
+      switch (options.language) {
       case 'js': return transpileJs(options);
       case 'coffee': return transpileCoffee(options);
       default:
         grunt.fail.warn(
-          'Language ' + language + ' is not a valid ' +
+          'Language ' + options.language + ' is not a valid ' +
           'source language for HAML; choices are: coffee and js\n');
       }
-
     } catch (e) {
       grunt.log.error(e);
       grunt.fail.warn('Haml failed to compile.');
@@ -113,10 +95,9 @@ module.exports = function(grunt) {
   var transpileJs = function(options) {
 
     var haml = require('haml');
-    var output = null;
 
     // First pass; generate the javascript method.
-    output = haml(options.input);
+    var output = haml(options.input);
 
     if (options.target === 'html') {
       // Evaluate method with the context and return it.
@@ -136,7 +117,7 @@ module.exports = function(grunt) {
     switch (options.placement) {
     case 'global':
       // Set in the desired namespace.
-      output = options.namespace + "['" + options.template + "'] = " + output;
+      output = options.namespace + "['" + options.name + "'] = " + output;
       output = '\n' + output + '\n';
       break;
 
@@ -152,14 +133,14 @@ module.exports = function(grunt) {
 
       // Build define statement.
       var defineStatement = 'define([';
-      var modules = _(options.dependencies).values();
+      var modules = _.values(options.dependencies);
       modules = modules.length ? "'" + modules.join("','") + "'" : "";
       defineStatement += modules;
       defineStatement += '], function(';
-      defineStatement += _(options.dependencies).keys().join(',');
+      defineStatement += _.keys(options.dependencies).join(',');
       defineStatement += ') { \n';
 
-      // Wrap ouptut in it.
+      // Wrap output in it.
       output = defineStatement + 'return ' + output + ';\n});\n';
       break;
 
@@ -169,29 +150,22 @@ module.exports = function(grunt) {
         'destination placement for `haml-js`; choices ' +
         'are: amd and global\n');
     }
-
     // Return the final template.
     return output;
   };
 
   var transpileCoffee = function(options) {
     var hamlc = require('haml-coffee');
-    var namespace = options.namespace;
-    var output = null;
-
-    // Remove options not understood by the compiler.
-    delete options.namespace;
 
     switch (options.target) {
     case 'js':
       // Pass it off to haml-coffee to render a template in javascript.
-      return hamlc.template(options.input, options.template, options.namespace,
+      return hamlc.template(options.input, options.name, options.namespace,
         options);
 
     case 'html':
       // Pass it off to haml-coffee to render a template in javascript.
-      output = hamlc.compile(options.input, options);
-
+      var output = hamlc.compile(options.input, options);
       // Now we render it as HTML with the given context.
       return output(options.context);
 
@@ -201,6 +175,5 @@ module.exports = function(grunt) {
         'destination target for `haml-coffee`; choices ' +
         'are: html and js\n');
     }
-
   };
 };
