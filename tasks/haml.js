@@ -21,11 +21,11 @@ module.exports = function(grunt) {
     // Iterate through files.
     this.files.forEach(function(file) {
       // Get only files that are actually there.
-      var validFiles = file.src.filter(function(path) {
-        if (grunt.file.exists(path)) {
+      var validFiles = file.src.filter(function(filepath) {
+        if (grunt.file.exists(filepath)) {
           return true;
         } else {
-          grunt.log.warn('Source file "' + path + '" not found.');
+          grunt.log.warn('Source file "' + filepath + '" not found.');
           return false;
         }
       });
