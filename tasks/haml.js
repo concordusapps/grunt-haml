@@ -13,44 +13,9 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('haml', 'Compile Haml files', function() {
     var helpers = require('grunt-lib-contrib').init(grunt);
-    var options = helpers.options(this);
-
-    // Write options iff verbose.
-    grunt.verbose.writeflags(options, 'Options');
-
-    // Iterate through files.
-    this.files.forEach(function(file) {
-      // Get only files that are actually there.
-      var validFiles = file.src.filter(function(filepath) {
-        if (grunt.file.exists(filepath)) {
-          return true;
-        } else {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        }
-      });
-
-      // Ensure we have files to compile.
-      if (validFiles.length === 0) {
-        grunt.log.writeln('Unable to compile; no valid files were found.');
-        return;
-      }
-
-      // Read each valid file and transpile it.
-      var output = validFiles.map(function (source) {
-        return transpile(grunt.file.read(source, options));
-      });
-
-      // Write the new file.
-      grunt.file.write(file.dest, output.join('\n'));
-      grunt.log.writeln('File ' + file.dest.cyan + ' created.');
-    });
-  });
-
-  var transpile = function(name, options) {
-    // Construct appropriate options to pass to the compiler
-    options = _({filename: name}).extend(options);
-    options = _(options).defaults({
+    var defaultOptions = helpers.options(this);
+    // Set up some defaults for the options.
+    _.defaults(defaultOptions, {
       // Default target is javascript.
       target: 'html',
 
@@ -67,27 +32,66 @@ module.exports = function(grunt) {
       dependencies: {}
     });
 
+    // Write options iff verbose.
+    grunt.verbose.writeflags(defaultOptions, 'Options');
+
+    // Iterate through files.
+    this.files.forEach(function(file) {
+      // Set the target options.
+      var options = this.options(defaultOptions);
+
+      // Get only files that are actually there.
+      var validFiles = file.src.filter(function(filepath) {
+        if (grunt.file.exists(filepath)) {
+          return true;
+        } else {
+          grunt.log.warn('Source file "' + filepath + '" not found.');
+          return false;
+        }
+      });
+
+      // Ensure we have files to compile.
+      if (validFiles.length > 0) {
+        // Transpile each file.
+        var output = validFiles.map(function (filename) {
+          return transpile(filename, options);
+        });
+        // Write the new file.
+        grunt.file.write(file.dest, output.join('\n'));
+        grunt.log.writeln('File ' + file.dest.cyan + ' created.');
+      } else {
+        grunt.log.writeln('Unable to compile; no valid files were found.');
+      }
+    });
+  });
+
+  var transpile = function(name, opts) {
+    // Construct appropriate options to pass to the compiler
+    // Create a new object so we do not mutate the target options.
+    var options = _.extend({filename: name}, opts);
+
+    // Store the desired language.
+    var language = options.language;
+    var target = options.target;
+    var context = options.context;
+    var output = null;
+
+    var template = options.name;
+    if (template === undefined) {
+      // Default template name is the basename w/o the extension.
+      template = path.basename(name, path.extname(name));
+    }
+
+    // Remove options not understood by any compiler.
+    delete options.language;
+    delete options.target;
+    delete options.name;
+    delete options.context;
+
     // Read in the file
     var input = grunt.file.read(name);
 
     try {
-      // Store the desired language.
-      var language = options.language;
-      var target = options.target;
-      var context = options.context;
-      var output = null;
-
-      var template = options.name;
-      if (template === undefined) {
-        // Default template name is the basename w/o the extension.
-        template = path.basename(name, path.extname(name));
-      }
-
-      // Remove options not understood by any compiler.
-      delete options.language;
-      delete options.target;
-      delete options.name;
-      delete options.context;
 
       switch (language) {
       case 'js':
