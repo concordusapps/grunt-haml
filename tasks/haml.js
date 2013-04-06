@@ -32,13 +32,13 @@ module.exports = function(grunt) {
       dependencies: {}
     });
 
-    // Write options iff verbose.
-    grunt.verbose.writeflags(defaultOptions, 'Options');
+    // Set the target options.
+    var options = this.options(defaultOptions);
 
-    // Iterate through files.
+    // Write options iff verbose.
+    grunt.verbose.writeflags(options, 'Options');
+
     this.files.forEach(function(file) {
-      // Set the target options.
-      var options = this.options(defaultOptions);
 
       // Get only files that are actually there.
       var validFiles = file.src.filter(function(filepath) {
