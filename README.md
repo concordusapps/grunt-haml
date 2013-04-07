@@ -1,6 +1,6 @@
 # grunt-haml [![Build Status](https://travis-ci.org/concordusapps/grunt-haml.png?branch=master)](http://travis-ci.org/concordusapps/grunt-haml)
 
-> Compile Haml files to JavaScript.
+> Process HAML templates to precompiled JavaScript or rendered HTML.
 
 
 ## Getting Started
