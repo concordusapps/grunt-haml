@@ -194,7 +194,11 @@ module.exports = function(grunt) {
     var p = path.resolve(options.filename);
     var result = execSync.exec(options.rubyHamlCommand + ' ' + p);
     if (result.code !== 0) {
-      grunt.fail.warn("Error executing haml: " + result.stderr + result.stdout);
+      grunt.fail.warn(
+        "Error executing haml on " + p + ": \n" +
+        result.stderr + "\n" +
+        result.stdout
+      );
     }
     return result.stdout;
   };
