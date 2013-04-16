@@ -114,6 +114,18 @@ module.exports = function(grunt) {
             'test/fixtures/js/js2.haml'
           ]
         }
+      },
+      'ruby_html': {
+        options: {
+          language: 'ruby'
+        },
+        files: {
+          'tmp/ruby_html/haml.html': 'test/fixtures/ruby/ruby1.haml',
+          'tmp/ruby_html/concat.html': [
+            'test/fixtures/ruby/ruby1.haml',
+            'test/fixtures/ruby/ruby2.haml'
+          ]
+        }
       }
     },
 

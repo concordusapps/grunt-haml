@@ -12,44 +12,53 @@ var fs = require('fs');
 
 exports.coffee = {
   compile: function(test) {
+    var testSetups = [];
 
+    // Haml-js test setup
     var targets          = ['js', 'html'];
     var inputVariations  = {'js': ['', '_amd'], 'html': ['']};
     var languages        = ['coffee', 'js'];
     var outputVariations = ['haml', 'concat'];
-
-    test.expect(
-      languages.length *
-      outputVariations.length *
-      grunt.util._(inputVariations).values().reduce(function(sum, value) {
-        return sum + value.length;
-      }, 0)
-    );
-
-    var actual   = null, expected  = null,
-        target   = null, language  = null,
-        name     = null, inputVariation = null,
-        outputVariation = null;
-
     for (var i = 0; i < targets.length; i++) {
-      target = targets[i];
+      var target = targets[i];
       for (var j = 0; j < languages.length; j++) {
-        language = languages[j];
+        var language = languages[j];
         for (var m = 0; m < outputVariations.length; m++) {
-          outputVariation = outputVariations[m];
+          var outputVariation = outputVariations[m];
           for (var n = 0; n < inputVariations[target].length; n++) {
-            inputVariation = inputVariations[target][n];
-            name = language + '_' + target + inputVariation;
+            var inputVariation = inputVariations[target][n];
+            var name = language + '_' + target + inputVariation;
             name += '/' + outputVariation + '.' + target;
-            actual = grunt.file.read('tmp/' + name);
-            expected = grunt.file.read('test/expected/' + name);
-            test.equal(actual, expected,
-              'should compile haml on ' + language + ' to ' + target);
+            testSetups.push({
+              actual: grunt.file.read('tmp/' + name),
+              expected: grunt.file.read('test/expected/' + name),
+              language: language,
+              target: target
+            });
           }
         }
       }
     }
 
+    // Ruby haml test setups
+    for (var x = 0; x < outputVariations.length; x++) {
+      var variation = outputVariations[x];
+      var ruby_test_name = 'ruby_html/' + variation + '.html';
+      testSetups.push({
+        actual: grunt.file.read('tmp/' + ruby_test_name),
+        expected: grunt.file.read('test/expected/' + ruby_test_name),
+        language: 'ruby',
+        target: 'html'
+      });
+    }
+
+    // Run all the tests we prepared
+    test.expect(testSetups.length);
+    for (i = 0; i < testSetups.length; i++) {
+      var testSetup = testSetups[i];
+      test.equal(testSetup.actual, testSetup.expected,
+        'should compile haml on ' + testSetup.language + ' to ' + testSetup.target);
+    }
     test.done();
   }
 };
