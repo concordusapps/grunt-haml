@@ -29,7 +29,7 @@
   "dependencies": {
     "haml": "0.4.x",
     "haml-coffee": "1.8.x",
-    "execSync": "*"
+    "execSync": "0.0.4"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "0.1.x",
