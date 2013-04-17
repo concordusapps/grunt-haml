@@ -144,11 +144,29 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-internal');
 
+  // The grunt-contrib-internal task defaults to the wrong URL for travis
+  grunt.registerTask('fix-readme', 'Fix travis URL in README.md', function () {
+    grunt.task.requires('build-contrib');
+
+    var fs = require('fs');
+    var readme = fs.readFileSync('README.md', {encoding: "utf-8"});
+    readme = readme.replace(
+      /travis-ci.org\/gruntjs/,
+      'travis-ci.org/concordusapps'
+    );
+    fs.writeFileSync('README.md', readme);
+    return true;
+  });
+
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'haml', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test', 'build-contrib']);
-
+  grunt.registerTask('default', [
+    'jshint',
+    'test',
+    'build-contrib',
+    'fix-readme']
+  );
 };
