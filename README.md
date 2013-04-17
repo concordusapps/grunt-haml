@@ -1,6 +1,6 @@
 # grunt-haml [![Build Status](https://secure.travis-ci.org/concordusapps/grunt-haml.png?branch=master)](http://travis-ci.org/gruntjs/grunt-haml)
 
-> Compile Haml files to JavaScript.
+> Process HAML templates to precompiled JavaScript or rendered HTML.
 
 
 ## Getting Started
@@ -185,4 +185,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Apr 17 2013 10:47:10.*
+*This file was generated on Wed Apr 17 2013 10:48:40.*
