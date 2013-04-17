@@ -151,7 +151,7 @@ module.exports = function(grunt) {
     var fs = require('fs');
     var readme = fs.readFileSync('README.md', {encoding: "utf-8"});
     readme = readme.replace(
-      /travis-ci.org\/gruntjs/,
+      /travis-ci.org\/gruntjs/g,
       'travis-ci.org/concordusapps'
     );
     fs.writeFileSync('README.md', readme);
