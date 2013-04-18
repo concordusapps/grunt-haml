@@ -6,11 +6,14 @@ Default: ```js```
 
 Specifies the script language and compiler to use alongside HAML.
 
-Accepts following values: ```coffee``` or ```js``` in which it will use
-[haml-coffee][] or [haml-js][] respectively.
+Accepts following values: ```coffee```, ```js```, or ```ruby```.
+If given ```coffee``` or ```js``` it will use
+[haml-coffee][] or [haml-js][] respectively. If given ```ruby``` it will
+shell out to the [haml gem] executable.
 
 [haml-coffee]: https://github.com/netzpirat/haml-coffee
 [haml-js]: https://github.com/creationix/haml-js
+[haml gem]: http://rubygems.org/gems/haml
 
 ## target
 Type: ```string```
@@ -21,6 +24,9 @@ Specifies the target language to compile to.
 Accepts the following values: ```js``` or ```html```. For ```js``` the template
 is generated and for ```html``` the template is both generated and rendered
 into its resultant HTML.
+
+If ```language``` is set to ```ruby``` then ```target```
+must be set to ```html```.
 
 ## placement
 Type: ```string```
@@ -104,3 +110,12 @@ Default: ```true```
 Compile the JavaScript without the top-level function safety wrapper.
 
 *Defined only for language == 'coffee' and target == 'js'.*
+
+## rubyHamlCommand
+Type: ```string```
+Default: ```haml -t ugly```
+
+The shell command which will be ran to compile the HAML. The path to the
+HAML file will be passed as the last command-line argument.
+
+*Defined only for language == 'ruby'
