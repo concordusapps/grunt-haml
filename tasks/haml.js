@@ -27,7 +27,10 @@ module.exports = function(grunt) {
       namespace: 'window.HAML',
 
       // Default hash of dependencies for AMD.
-      dependencies: {}
+      dependencies: {},
+
+      // External haml command to execute, must accept STDIN
+      rubyHamlCommand: 'haml -t ugly'
     });
 
     // Write options iff verbose.
@@ -78,6 +81,7 @@ module.exports = function(grunt) {
       switch (options.language) {
       case 'js': return transpileJs(options);
       case 'coffee': return transpileCoffee(options);
+      case 'ruby': return transpileRuby(options);
       default:
         grunt.fail.warn(
           'Language ' + options.language + ' is not a valid ' +
@@ -90,7 +94,6 @@ module.exports = function(grunt) {
   };
 
   var transpileJs = function(options) {
-
     var haml = require('haml');
 
     // First pass; generate the javascript method.
@@ -102,7 +105,7 @@ module.exports = function(grunt) {
     } else if (options.target !== 'js') {
       grunt.fail.warn(
         'Target ' + options.target + ' is not a valid ' +
-        'destination target for `haml-coffee`; choices ' +
+        'destination target for `haml-js`; choices ' +
         'are: html and js\n');
     }
 
@@ -172,5 +175,31 @@ module.exports = function(grunt) {
         'destination target for `haml-coffee`; choices ' +
         'are: html and js\n');
     }
+  };
+
+  var transpileRuby = function(options) {
+    var execSync = require('execSync');
+
+    if (options.context) {
+      grunt.fail.warn("Context is not a valid option for `haml-ruby`");
+    }
+
+    if (options.target !== 'html') {
+      grunt.fail.warn(
+        'Target ' + options.target + ' is not a valid ' +
+        'destination target for `haml-ruby`; choices ' +
+        'are: html\n');
+    }
+
+    var p = path.resolve(options.filename);
+    var result = execSync.exec(options.rubyHamlCommand + ' ' + p);
+    if (result.code !== 0) {
+      grunt.fail.warn(
+        "Error executing haml on " + p + ": \n" +
+        result.stderr + "\n" +
+        result.stdout
+      );
+    }
+    return result.stdout;
   };
 };

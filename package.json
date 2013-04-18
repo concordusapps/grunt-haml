@@ -1,6 +1,6 @@
 {
   "name": "grunt-haml",
-  "description": "Compile Haml files to JavaScript.",
+  "description": "Process HAML templates to precompiled JavaScript or rendered HTML.",
   "version": "0.4.0",
   "homepage": "https://github.com/concordusapps/grunt-haml",
   "author": {
@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "haml": "0.4.x",
-    "haml-coffee": "1.8.x"
+    "haml-coffee": "1.8.x",
+    "execSync": "0.0.4"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "0.1.x",

@@ -114,6 +114,18 @@ module.exports = function(grunt) {
             'test/fixtures/js/js2.haml'
           ]
         }
+      },
+      'ruby_html': {
+        options: {
+          language: 'ruby'
+        },
+        files: {
+          'tmp/ruby_html/haml.html': 'test/fixtures/ruby/ruby1.haml',
+          'tmp/ruby_html/concat.html': [
+            'test/fixtures/ruby/ruby1.haml',
+            'test/fixtures/ruby/ruby2.haml'
+          ]
+        }
       }
     },
 
@@ -132,11 +144,29 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-internal');
 
+  // The grunt-contrib-internal task defaults to the wrong URL for travis
+  grunt.registerTask('fix-readme', 'Fix travis URL in README.md', function () {
+    grunt.task.requires('build-contrib');
+
+    var fs = require('fs');
+    var readme = fs.readFileSync('README.md', {encoding: "utf-8"});
+    readme = readme.replace(
+      /travis-ci.org\/gruntjs/g,
+      'travis-ci.org/concordusapps'
+    );
+    fs.writeFileSync('README.md', readme);
+    return true;
+  });
+
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'haml', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test', 'build-contrib']);
-
+  grunt.registerTask('default', [
+    'jshint',
+    'test',
+    'build-contrib',
+    'fix-readme']
+  );
 };
