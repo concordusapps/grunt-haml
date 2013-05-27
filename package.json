@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "haml": "0.4.x",
-    "haml-coffee": "1.8.x",
+    "haml-coffee": "1.10.x",
     "execSync": "0.0.4"
   },
   "devDependencies": {
