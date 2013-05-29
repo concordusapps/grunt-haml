@@ -149,7 +149,7 @@ module.exports = function(grunt) {
     grunt.task.requires('build-contrib');
 
     var fs = require('fs');
-    var readme = fs.readFileSync('README.md', {encoding: "utf-8"});
+    var readme = fs.readFileSync('README.md').toString('utf8');
     readme = readme.replace(
       /travis-ci.org\/gruntjs/g,
       'travis-ci.org/concordusapps'
