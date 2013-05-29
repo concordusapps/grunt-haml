@@ -171,6 +171,8 @@ haml: {
 
 ## Release History
 
+ * 2013-05-27   v0.5.0   Add 'ruby' as a language option Update version of haml-coffee 1.10.x
+ * 2013-04-15   v0.4.0   Full support of grunt 0.4.x
  * 2013-03-21   v0.3.2   Corrected placement option to match readme.
  * 2013-01-27   v0.3.1   Update to current version of grunt.
  * 2012-12-19   v0.3.0   Name changed to `grunt-haml` Default target changed to `html`
@@ -185,4 +187,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Apr 17 2013 10:59:19.*
+*This file was generated on Tue May 28 2013 17:29:14.*
