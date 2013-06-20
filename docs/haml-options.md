@@ -32,7 +32,11 @@ must be set to ```html```.
 Type: ```string```
 Default: ```global```
 
-Specifies where to place the resultant template
+Specifies where to place the resultant template.
+
+Currently accepts either ```global``` or ```amd```.
+- ```global``` places the template on the window.
+- ```amd``` uses AMD to load the template.
 
 *Defined only for target == 'js'.*
 
