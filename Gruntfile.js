@@ -73,8 +73,25 @@ module.exports = function(grunt) {
           ]
         }
       },
+      'coffee_html_wrapped': {
+        options: {
+          language: 'coffee',
+          wrapHtmlInJs: true,
+          context: {
+            'greet': 'Morgan Freeman',
+            'class': 'still alive'
+          }
+        },
+        files: {
+          'tmp/coffee_html_wrapped/haml.html': 'test/fixtures/coffee/coffee1.haml',
+          'tmp/coffee_html_wrapped/concat.html': [
+            'test/fixtures/coffee/coffee1.haml',
+            'test/fixtures/coffee/coffee2.haml'
+          ]
+        }
+      },
       'js_js': {
-        options: { target: 'js' },
+        options: { target: 'js', includePath: true, pathRelativeTo: './test/' },
         files: {
           'tmp/js_js/haml.js': 'test/fixtures/js/js1.haml',
           'tmp/js_js/concat.js': [
@@ -115,6 +132,22 @@ module.exports = function(grunt) {
           ]
         }
       },
+      'js_html_wrapped': {
+        options: {
+          wrapHtmlInJs: true,
+          context: {
+            length: 321,
+            height: 41
+          }
+        },
+        files: {
+          'tmp/js_html_wrapped/haml.html': 'test/fixtures/js/js1.haml',
+          'tmp/js_html_wrapped/concat.html': [
+            'test/fixtures/js/js1.haml',
+            'test/fixtures/js/js2.haml'
+          ]
+        }
+      },
       'ruby_html': {
         options: {
           language: 'ruby'
@@ -122,6 +155,19 @@ module.exports = function(grunt) {
         files: {
           'tmp/ruby_html/haml.html': 'test/fixtures/ruby/ruby1.haml',
           'tmp/ruby_html/concat.html': [
+            'test/fixtures/ruby/ruby1.haml',
+            'test/fixtures/ruby/ruby2.haml'
+          ]
+        }
+      },
+      'ruby_html_wrapped': {
+        options: {
+          language: 'ruby',
+          wrapHtmlInJs: true
+        },
+        files: {
+          'tmp/ruby_html_wrapped/haml.html': 'test/fixtures/ruby/ruby1.haml',
+          'tmp/ruby_html_wrapped/concat.html': [
             'test/fixtures/ruby/ruby1.haml',
             'test/fixtures/ruby/ruby2.haml'
           ]
