@@ -29,8 +29,18 @@ module.exports = function(grunt) {
       // Default hash of dependencies for AMD.
       dependencies: {},
 
+      // Default should name include path
+      includePath: false,
+
+      // Default path relative to
+      pathRelativeTo: './',
+
       // External haml command to execute, must accept STDIN
-      rubyHamlCommand: 'haml -t ugly'
+      rubyHamlCommand: 'haml -t ugly',
+
+      // if target is html, wrap it in JS using placement rules
+      wrapHtmlInJs: false
+
     });
 
     // Write options iff verbose.
@@ -38,7 +48,7 @@ module.exports = function(grunt) {
 
     // Transpile each src/dest group of files.
     this.files.forEach(function(file) {
-
+      var opts;
       // Get only files that are actually there.
       var validFiles = file.src.filter(function(filepath) {
         if (grunt.file.exists(filepath)) {
@@ -53,7 +63,24 @@ module.exports = function(grunt) {
       if (validFiles.length > 0) {
         // Transpile each file.
         var output = validFiles.map(function (filename) {
-          return transpile(filename, options);
+          opts = _.extend({}, options);
+
+          // Ensure we have a template name.
+          if (opts.name === undefined) {
+            // Default template name is the basename w/o the extension.
+            // or relative path to + basename w/o extension if includePath is true
+            var defaultPath = '';
+            if (opts.includePath) {
+              defaultPath = path.relative(opts.pathRelativeTo, path.dirname(filename));
+              if (defaultPath !== '') {
+                defaultPath += '/';
+              }
+            }
+            opts.name = defaultPath + path.basename(filename, path.extname(filename));
+          }
+
+
+          return transpile(filename, opts);
         });
         // Write the new file.
         grunt.file.write(file.dest, output.join('\n'));
@@ -70,12 +97,6 @@ module.exports = function(grunt) {
     var options = _.extend({filename: name}, opts);
     // Read in the file
     options.input = grunt.file.read(name);
-
-    // Ensure we have a template name.
-    if (options.name === undefined) {
-      // Default template name is the basename w/o the extension.
-      options.name = path.basename(name, path.extname(name));
-    }
 
     try {
       switch (options.language) {
@@ -101,7 +122,11 @@ module.exports = function(grunt) {
 
     if (options.target === 'html') {
       // Evaluate method with the context and return it.
-      return output(options.context);
+      output = output(options.context);
+      if (options.wrapHtmlInJs) {
+        output = wrapIt(htmlescape(output), options);
+      }
+      return output;
     } else if (options.target !== 'js') {
       grunt.fail.warn(
         'Target ' + options.target + ' is not a valid ' +
@@ -114,71 +139,87 @@ module.exports = function(grunt) {
     output = output.toString().substring(27);
     output = 'function(locals)' + output;
 
-    switch (options.placement) {
-    case 'global':
-      // Set in the desired namespace.
-      output = options.namespace + "['" + options.name + "'] = " + output;
-      output = '\n' + output + '\n';
-      break;
-
-    case 'amd':
-      // Search for additional dependencies
-      var lookup = /require.*?\(.*?["'](.*)["'].*?\)/g;
-      var extra = lookup.exec(options.input);
-      while (extra !== null) {
-        var base = path.basename(extra[1]);
-        options.dependencies[base] = extra[1];
-        extra = lookup.exec(options.input);
-      }
-
-      // Build define statement.
-      var defineStatement = 'define([';
-      var modules = _.values(options.dependencies);
-      modules = modules.length ? "'" + modules.join("','") + "'" : "";
-      defineStatement += modules;
-      defineStatement += '], function(';
-      defineStatement += _.keys(options.dependencies).join(',');
-      defineStatement += ') { \n';
-
-      // Wrap output in it.
-      output = defineStatement + 'return ' + output + ';\n});\n';
-      break;
-
-    default:
-      grunt.fail.warn(
-        'Placement ' + options.placement + ' is not a valid ' +
-        'destination placement for `haml-js`; choices ' +
-        'are: amd and global\n');
-    }
     // Return the final template.
-    return output;
+    return wrapIt(output, options);
+  };
+
+  var htmlescape = function(input) {
+    input = input.replace('</script>', '</scr" + "ipt>');
+    input = JSON.stringify(input) + ';';
+    return input;
+  };
+
+  var wrapIt = function(input, options) {
+    switch (options.placement) {
+      case 'global':
+        // Set in the desired namespace.
+        input = options.namespace + "['" + options.name + "'] = " + input;
+        input = '\n' + input + '\n';
+        break;
+
+      case 'amd':
+        // Search for additional dependencies
+        var lookup = /require.*?\(.*?["'](.*)["'].*?\)/g;
+        var extra = lookup.exec(options.input);
+        while (extra !== null) {
+          var base = path.basename(extra[1]);
+          options.dependencies[base] = extra[1];
+          extra = lookup.exec(options.input);
+        }
+
+        // Build define statement.
+        var defineStatement = 'define([';
+        var modules = _.values(options.dependencies);
+        modules = modules.length ? "'" + modules.join("','") + "'" : "";
+        defineStatement += modules;
+        defineStatement += '], function(';
+        defineStatement += _.keys(options.dependencies).join(',');
+        defineStatement += ') { \n';
+
+        // Wrap input in it.
+        input = defineStatement + 'return ' + input + ';\n});\n';
+        break;
+
+      default:
+        grunt.fail.warn(
+          'Placement ' + options.placement + ' is not a valid ' +
+          'destination placement for `haml-js`; choices ' +
+          'are: amd and global\n');
+    }
+    return input;
   };
 
   var transpileCoffee = function(options) {
     var hamlc = require('haml-coffee');
 
     switch (options.target) {
-    case 'js':
-      // Pass it off to haml-coffee to render a template in javascript.
-      return hamlc.template(options.input, options.name, options.namespace,
-        options);
+      case 'js':
+        // Pass it off to haml-coffee to render a template in javascript.
+        return hamlc.template(options.input, options.name, options.namespace,
+          options);
 
-    case 'html':
-      // Pass it off to haml-coffee to render a template in javascript.
-      var output = hamlc.compile(options.input, options);
-      // Now we render it as HTML with the given context.
-      return output(options.context);
+      case 'html':
+        // Pass it off to haml-coffee to render a template in javascript.
+        var output = hamlc.compile(options.input, options)(options.context);
 
-    default:
-      grunt.fail.warn(
-        'Target ' + options.target + ' is not a valid ' +
-        'destination target for `haml-coffee`; choices ' +
-        'are: html and js\n');
-    }
+        // Now we render it as HTML with the given context.
+        if (options.wrapHtmlInJs) {
+          output = wrapIt(htmlescape(output), options);
+        }
+
+        return output;
+
+      default:
+        grunt.fail.warn(
+          'Target ' + options.target + ' is not a valid ' +
+          'destination target for `haml-coffee`; choices ' +
+          'are: html and js\n');
+      }
   };
 
   var transpileRuby = function(options) {
-    var execSync = require('execSync');
+    var execSync = require('execSync'),
+        output;
 
     if (options.context) {
       grunt.fail.warn("Context is not a valid option for `haml-ruby`");
@@ -200,6 +241,10 @@ module.exports = function(grunt) {
         result.stdout
       );
     }
-    return result.stdout;
+    output = result.stdout;
+    if (options.wrapHtmlInJs) {
+      output = wrapIt(htmlescape(output), options);
+    }
+    return output;
   };
 };

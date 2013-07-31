@@ -1,5 +1,5 @@
 
-window.HAML['js1'] = function(locals){
+window.HAML['fixtures/js/js1'] = function(locals){
 function html_escape(text) {
     return (text + "").
       replace(/&/g, "&amp;").
@@ -17,7 +17,7 @@ with(locals || {}) {
 }
 
 
-window.HAML['js2'] = function(locals){
+window.HAML['fixtures/js/js2'] = function(locals){
 function html_escape(text) {
     return (text + "").
       replace(/&/g, "&amp;").

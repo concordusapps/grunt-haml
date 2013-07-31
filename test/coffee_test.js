@@ -16,9 +16,10 @@ exports.coffee = {
 
     // Haml-js test setup
     var targets          = ['js', 'html'];
-    var inputVariations  = {'js': ['', '_amd'], 'html': ['']};
+    var inputVariations  = {'js': ['', '_amd'], 'html': ['', '_wrapped']};
     var languages        = ['coffee', 'js'];
     var outputVariations = ['haml', 'concat'];
+
     for (var i = 0; i < targets.length; i++) {
       var target = targets[i];
       for (var j = 0; j < languages.length; j++) {
@@ -33,12 +34,27 @@ exports.coffee = {
               actual: grunt.file.read('tmp/' + name),
               expected: grunt.file.read('test/expected/' + name),
               language: language,
-              target: target
+              target: target,
+              wrapHtmlInJs: inputVariation === '_wrapped'
             });
           }
         }
       }
     }
+
+    testSetups.push({
+      actual: grunt.file.read('tmp/ruby_html_wrapped/haml.html'),
+      expected: grunt.file.read('test/expected/ruby_html_wrapped/haml.html'),
+      language: 'ruby',
+      target: 'html'
+    });
+
+    testSetups.push({
+      actual: grunt.file.read('tmp/ruby_html_wrapped/concat.html'),
+      expected: grunt.file.read('test/expected/ruby_html_wrapped/concat.html'),
+      language: 'ruby',
+      target: 'html'
+    });
 
     // Ruby haml test setups
     for (var x = 0; x < outputVariations.length; x++) {
