@@ -82,8 +82,56 @@ window.HAML['apple'] =  function(locals) {
     // template code
 };
 ```
+*Defined only for target == 'js' and placement == 'global'.*
+
+#### includePath
+Type: ```boolean```
+Default: ```false```
+
+Specifies whether or not to include the relative path in automatic generated
+name.
+
+When enabled, you'll get results like window.HAML['path/to/template']
+instead of window.HAML['template'].
 
 *Defined only for target == 'js' and placement == 'global'.*
+
+#### pathRelativeTo
+Type: ```string```
+Default: ```./```
+
+Specifies the path names will be based from.
+
+If ```pathRelativeTo``` == ```./templates/``` you would get:
+```window.HAML['example']```
+
+Otherwise, with ```./``` you'll get:
+```window.HAML['templates/example']```
+
+*Defined only for target == 'js' and placement == 'global'.*
+
+#### wrapHtmlInJs
+Type: ```boolean```
+Default: ```false```
+
+Specifies whether or not to wrap the HTML in JavaScript. This is useful if you
+use your own templating system and want to just convert HAML to HTML, and
+include it in your project as JavaScript variables.
+
+When false, you'll get:
+```html
+<div>
+  ....html....
+</div>
+```
+
+When true, you'll get:
+```js
+window.HAML['template'] = "<div>\n  ....html....\n</div>";
+```
+
+Great if you're compiling a bunch of templates into the one file to include in
+your project.
 
 #### dependencies
 Type: ```object```
