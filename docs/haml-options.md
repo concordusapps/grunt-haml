@@ -141,7 +141,7 @@ name.
 When enabled, you'll get results like window.HAML['path/to/template']
 instead of window.HAML['template'].
 
-*Defined only for target == 'js' and placement == 'global'.*
+*Defined only `placement == 'global'`.*
 
 ## pathRelativeTo
 Type: ```string```
@@ -155,4 +155,4 @@ If ```pathRelativeTo``` == ```./templates/``` you would get:
 Otherwise, with ```./``` you'll get:
 ```window.HAML['templates/example']```
 
-*Defined only for target == 'js' and placement == 'global'.*
+*Defined only `placement == 'global'`.*
