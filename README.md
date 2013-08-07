@@ -55,7 +55,11 @@ must be set to ```html```.
 Type: ```string```
 Default: ```global```
 
-Specifies where to place the resultant template
+Specifies where to place the resultant template.
+
+Currently accepts either ```global``` or ```amd```.
+- ```global``` places the template on the window.
+- ```amd``` uses AMD to load the template.
 
 *Defined only for target == 'js'.*
 
@@ -82,56 +86,8 @@ window.HAML['apple'] =  function(locals) {
     // template code
 };
 ```
-*Defined only for target == 'js' and placement == 'global'.*
-
-#### includePath
-Type: ```boolean```
-Default: ```false```
-
-Specifies whether or not to include the relative path in automatic generated
-name.
-
-When enabled, you'll get results like window.HAML['path/to/template']
-instead of window.HAML['template'].
 
 *Defined only for target == 'js' and placement == 'global'.*
-
-#### pathRelativeTo
-Type: ```string```
-Default: ```./```
-
-Specifies the path names will be based from.
-
-If ```pathRelativeTo``` == ```./templates/``` you would get:
-```window.HAML['example']```
-
-Otherwise, with ```./``` you'll get:
-```window.HAML['templates/example']```
-
-*Defined only for target == 'js' and placement == 'global'.*
-
-#### wrapHtmlInJs
-Type: ```boolean```
-Default: ```false```
-
-Specifies whether or not to wrap the HTML in JavaScript. This is useful if you
-use your own templating system and want to just convert HAML to HTML, and
-include it in your project as JavaScript variables.
-
-When false, you'll get:
-```html
-<div>
-  ....html....
-</div>
-```
-
-When true, you'll get:
-```js
-window.HAML['template'] = "<div>\n  ....html....\n</div>";
-```
-
-Great if you're compiling a bunch of templates into the one file to include in
-your project.
 
 #### dependencies
 Type: ```object```
@@ -182,6 +138,13 @@ Compile the JavaScript without the top-level function safety wrapper.
 
 *Defined only for language == 'coffee' and target == 'js'.*
 
+#### precompile
+Type: ```boolean```
+Default: ```true```
+
+Process HAML templates to precompiled JavaScript or not. Defaults to `true` for
+`target == 'js'` and is forced to `false` for `target == 'html'`.
+
 #### rubyHamlCommand
 Type: ```string```
 Default: ```haml -t ugly```
@@ -190,6 +153,32 @@ The shell command which will be ran to compile the HAML. The path to the
 HAML file will be passed as the last command-line argument.
 
 *Defined only for language == 'ruby'
+
+#### includePath
+Type: ```boolean```
+Default: ```false```
+
+Specifies whether or not to include the relative path in automatic generated
+name.
+
+When enabled, you'll get results like window.HAML['path/to/template']
+instead of window.HAML['template'].
+
+*Defined only `placement == 'global'`.*
+
+#### pathRelativeTo
+Type: ```string```
+Default: ```./```
+
+Specifies the path names will be based from.
+
+If ```pathRelativeTo``` == ```./templates/``` you would get:
+```window.HAML['example']```
+
+Otherwise, with ```./``` you'll get:
+```window.HAML['templates/example']```
+
+*Defined only `placement == 'global'`.*
 
 ### Usage examples
 
@@ -235,4 +224,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Tue May 28 2013 17:29:14.*
+*This file was generated on Wed Aug 07 2013 03:34:48.*
