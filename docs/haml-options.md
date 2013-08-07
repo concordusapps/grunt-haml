@@ -130,3 +130,29 @@ The shell command which will be ran to compile the HAML. The path to the
 HAML file will be passed as the last command-line argument.
 
 *Defined only for language == 'ruby'
+
+## includePath
+Type: ```boolean```
+Default: ```false```
+
+Specifies whether or not to include the relative path in automatic generated
+name.
+
+When enabled, you'll get results like window.HAML['path/to/template']
+instead of window.HAML['template'].
+
+*Defined only for target == 'js' and placement == 'global'.*
+
+## pathRelativeTo
+Type: ```string```
+Default: ```./```
+
+Specifies the path names will be based from.
+
+If ```pathRelativeTo``` == ```./templates/``` you would get:
+```window.HAML['example']```
+
+Otherwise, with ```./``` you'll get:
+```window.HAML['templates/example']```
+
+*Defined only for target == 'js' and placement == 'global'.*
