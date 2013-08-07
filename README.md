@@ -172,11 +172,17 @@ Default: ```./```
 
 Specifies the path names will be based from.
 
-If ```pathRelativeTo``` == ```./templates/``` you would get:
-```window.HAML['example']```
+If `pathRelativeTo == ./templates/` you would get:
 
-Otherwise, with ```./``` you'll get:
-```window.HAML['templates/example']```
+```
+window.HAML['example']
+```
+
+Otherwise, with `./` you'll get:
+
+```
+window.HAML['templates/example']
+```
 
 *Defined only `placement == 'global'`.*
 
@@ -208,6 +214,7 @@ haml: {
 
 ## Release History
 
+ * 2013-08-06   v0.6.0   Add 'precompile', 'includePath', and 'pathRelativeTo' option @leahciMic
  * 2013-05-27   v0.5.0   Add 'ruby' as a language option Update version of haml-coffee 1.10.x
  * 2013-04-15   v0.4.0   Full support of grunt 0.4.x
  * 2013-03-21   v0.3.2   Corrected placement option to match readme.
@@ -224,4 +231,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Aug 07 2013 03:34:48.*
+*This file was generated on Wed Aug 07 2013 03:42:39.*

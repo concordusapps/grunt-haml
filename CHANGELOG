@@ -1,3 +1,8 @@
+v0.6.0:
+  date: 2013-08-07
+  changes:
+    - Add 'precompile', 'includePath', and 'pathRelativeTo' option @leahciMic
+
 v0.5.0:
   date: 2013-05-28
   changes:

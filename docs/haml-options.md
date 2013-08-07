@@ -149,10 +149,16 @@ Default: ```./```
 
 Specifies the path names will be based from.
 
-If ```pathRelativeTo``` == ```./templates/``` you would get:
-```window.HAML['example']```
+If `pathRelativeTo == ./templates/` you would get:
 
-Otherwise, with ```./``` you'll get:
-```window.HAML['templates/example']```
+```
+window.HAML['example']
+```
+
+Otherwise, with `./` you'll get:
+
+```
+window.HAML['templates/example']
+```
 
 *Defined only `placement == 'global'`.*
