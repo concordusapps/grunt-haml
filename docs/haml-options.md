@@ -115,6 +115,13 @@ Compile the JavaScript without the top-level function safety wrapper.
 
 *Defined only for language == 'coffee' and target == 'js'.*
 
+## precompile
+Type: ```boolean```
+Default: ```true```
+
+Process HAML templates to precompiled JavaScript or not. Defaults to `true` for
+`target == 'js'` and is forced to `false` for `target == 'html'`.
+
 ## rubyHamlCommand
 Type: ```string```
 Default: ```haml -t ugly```

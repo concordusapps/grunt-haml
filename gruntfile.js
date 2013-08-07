@@ -76,7 +76,8 @@ module.exports = function(grunt) {
       'coffee_html_wrapped': {
         options: {
           language: 'coffee',
-          wrapHtmlInJs: true,
+          target: 'js',
+          precompile: false,
           context: {
             'greet': 'Morgan Freeman',
             'class': 'still alive'
@@ -134,7 +135,8 @@ module.exports = function(grunt) {
       },
       'js_html_wrapped': {
         options: {
-          wrapHtmlInJs: true,
+          precompile: false,
+          target: 'js',
           context: {
             length: 321,
             height: 41

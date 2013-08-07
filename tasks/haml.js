@@ -38,8 +38,9 @@ module.exports = function(grunt) {
       // External haml command to execute, must accept STDIN
       rubyHamlCommand: 'haml -t ugly',
 
-      // if target is html, wrap it in JS using placement rules
-      wrapHtmlInJs: false
+      // Precompile templates; if false (and target == 'js'), place rendered
+      // HTML in js variables.
+      precompile: true
 
     });
 
@@ -122,11 +123,7 @@ module.exports = function(grunt) {
 
     if (options.target === 'html') {
       // Evaluate method with the context and return it.
-      output = output(options.context);
-      if (options.wrapHtmlInJs) {
-        output = wrapIt(htmlescape(output), options);
-      }
-      return output;
+      return output(options.context);
     } else if (options.target !== 'js') {
       grunt.fail.warn(
         'Target ' + options.target + ' is not a valid ' +
@@ -134,10 +131,14 @@ module.exports = function(grunt) {
         'are: html and js\n');
     }
 
-    // Reduce to a true annoymous, unnamed method.
-    // TODO: Push this upstream.
-    output = output.toString().substring(27);
-    output = 'function(locals)' + output;
+    if (options.precompile) {
+      // Reduce to a true annoymous, unnamed method.
+      // TODO: Push this upstream.
+      output = output.toString().substring(27);
+      output = 'function(locals)' + output;
+    } else {
+      output = htmlescape(output(options.context));
+    }
 
     // Return the final template.
     return wrapIt(output, options);
@@ -194,20 +195,19 @@ module.exports = function(grunt) {
 
     switch (options.target) {
       case 'js':
-        // Pass it off to haml-coffee to render a template in javascript.
-        return hamlc.template(options.input, options.name, options.namespace,
-          options);
+        if (options.precompile) {
+          // Pass it off to haml-coffee to render a template in javascript.
+          return hamlc.template(options.input, options.name, options.namespace,
+            options);
+        } else {
+          // Pass it off to haml-coffee to render a template in javascript.
+          var output = hamlc.compile(options.input, options)(options.context);
+          return wrapIt(htmlescape(output), options);
+        }
 
       case 'html':
         // Pass it off to haml-coffee to render a template in javascript.
-        var output = hamlc.compile(options.input, options)(options.context);
-
-        // Now we render it as HTML with the given context.
-        if (options.wrapHtmlInJs) {
-          output = wrapIt(htmlescape(output), options);
-        }
-
-        return output;
+        return hamlc.compile(options.input, options)(options.context);
 
       default:
         grunt.fail.warn(
