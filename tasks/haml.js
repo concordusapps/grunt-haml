@@ -205,6 +205,8 @@ module.exports = function(grunt) {
           return wrapIt(htmlescape(output), options);
         }
 
+        break;
+
       case 'html':
         // Pass it off to haml-coffee to render a template in javascript.
         return hamlc.compile(options.input, options)(options.context);
