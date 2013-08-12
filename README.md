@@ -214,6 +214,7 @@ haml: {
 
 ## Release History
 
+ * 2013-08-11   v0.6.1   Update version of haml-coffee 1.11.x
  * 2013-08-06   v0.6.0   Add 'precompile', 'includePath', and 'pathRelativeTo' option @leahciMic
  * 2013-05-27   v0.5.0   Add 'ruby' as a language option Update version of haml-coffee 1.10.x
  * 2013-04-15   v0.4.0   Full support of grunt 0.4.x
@@ -231,4 +232,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Wed Aug 07 2013 03:42:39.*
+*This file was generated on Mon Aug 12 2013 15:45:11.*

@@ -1,3 +1,8 @@
+v0.6.1:
+  date: 2013-08-12
+  changes:
+    - Update version of haml-coffee 1.11.x
+
 v0.6.0:
   date: 2013-08-07
   changes:
