@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   'use strict';
 
   var path = require('path');
+  var async = grunt.util.async;
   var _    = grunt.util._;
 
   grunt.registerMultiTask('haml', 'Compile Haml files', function() {
@@ -44,11 +45,14 @@ module.exports = function(grunt) {
 
     });
 
+    // Make the test async.
+    var done = this.async();
+
     // Write options iff verbose.
     grunt.verbose.writeflags(options, 'Options');
 
     // Transpile each src/dest group of files.
-    this.files.forEach(function(file) {
+    async.forEach(this.files, function(file, callback) {
       var opts;
       // Get only files that are actually there.
       var validFiles = file.src.filter(function(filepath) {
@@ -62,48 +66,59 @@ module.exports = function(grunt) {
 
       // Ensure we have files to transpile.
       if (validFiles.length > 0) {
-        // Transpile each file.
-        var output = validFiles.map(function (filename) {
+
+        var processFile = function(filename, cb) {
           opts = _.extend({}, options);
 
           // Ensure we have a template name.
           if (opts.name === undefined) {
             // Default template name is the basename w/o the extension.
-            // or relative path to + basename w/o extension if includePath is true
+            // or relative path to + basename w/o extension if
+            // includePath is true
             var defaultPath = '';
             if (opts.includePath) {
-              defaultPath = path.relative(opts.pathRelativeTo, path.dirname(filename));
+              defaultPath = path.relative(
+                opts.pathRelativeTo, path.dirname(filename));
+
               if (defaultPath !== '') {
                 defaultPath += '/';
               }
             }
-            opts.name = defaultPath + path.basename(filename, path.extname(filename));
+            opts.name = defaultPath + path.basename(
+              filename, path.extname(filename));
           }
 
+          transpile(filename, opts, function(out) { cb(null, out); });
+        };
 
-          return transpile(filename, opts);
+        // Transpile each file.
+        async.map(validFiles, processFile, function (err, results) {
+          // Write the new file.
+          grunt.file.write(file.dest, results.join('\n'));
+          grunt.log.writeln('File ' + file.dest.cyan + ' created.');
+
+          // Let the series know were done.
+          callback();
         });
-        // Write the new file.
-        grunt.file.write(file.dest, output.join('\n'));
-        grunt.log.writeln('File ' + file.dest.cyan + ' created.');
       } else {
         grunt.log.writeln('Unable to compile; no valid files were found.');
       }
-    });
+    }, done);
   });
 
-  var transpile = function(name, opts) {
+  var transpile = function(name, opts, cb) {
     // Construct appropriate options to pass to the compiler
     // Create a new object so we do not mutate the target options.
     var options = _.extend({filename: name}, opts);
+
     // Read in the file
     options.input = grunt.file.read(name);
 
     try {
       switch (options.language) {
-      case 'js': return transpileJs(options);
-      case 'coffee': return transpileCoffee(options);
-      case 'ruby': return transpileRuby(options);
+      case 'js': transpileJs(options, cb); break;
+      case 'coffee': transpileCoffee(options, cb); break;
+      case 'ruby': transpileRuby(options, cb); break;
       default:
         grunt.fail.warn(
           'Language ' + options.language + ' is not a valid ' +
@@ -115,7 +130,7 @@ module.exports = function(grunt) {
     }
   };
 
-  var transpileJs = function(options) {
+  var transpileJs = function(options, cb) {
     var haml = require('haml');
 
     // First pass; generate the javascript method.
@@ -123,7 +138,8 @@ module.exports = function(grunt) {
 
     if (options.target === 'html') {
       // Evaluate method with the context and return it.
-      return output(options.context);
+      cb(output(options.context));
+      return;
     } else if (options.target !== 'js') {
       grunt.fail.warn(
         'Target ' + options.target + ' is not a valid ' +
@@ -141,7 +157,7 @@ module.exports = function(grunt) {
     }
 
     // Return the final template.
-    return wrapIt(output, options);
+    cb(wrapIt(output, options));
   };
 
   var htmlescape = function(input) {
@@ -190,26 +206,27 @@ module.exports = function(grunt) {
     return input;
   };
 
-  var transpileCoffee = function(options) {
+  var transpileCoffee = function(options, cb) {
     var hamlc = require('haml-coffee');
 
     switch (options.target) {
       case 'js':
         if (options.precompile) {
           // Pass it off to haml-coffee to render a template in javascript.
-          return hamlc.template(options.input, options.name, options.namespace,
-            options);
+          cb(hamlc.template(options.input, options.name, options.namespace,
+            options));
         } else {
           // Pass it off to haml-coffee to render a template in javascript.
           var output = hamlc.compile(options.input, options)(options.context);
-          return wrapIt(htmlescape(output), options);
+          cb(wrapIt(htmlescape(output), options));
         }
 
         break;
 
       case 'html':
         // Pass it off to haml-coffee to render a template in javascript.
-        return hamlc.compile(options.input, options)(options.context);
+        cb(hamlc.compile(options.input, options)(options.context));
+        break;
 
       default:
         grunt.fail.warn(
@@ -219,8 +236,8 @@ module.exports = function(grunt) {
       }
   };
 
-  var transpileRuby = function(options) {
-    var execSync = require('execSync'),
+  var transpileRuby = function(options, callback) {
+    var exec = require('child_process').exec,
         output;
 
     if (options.context) {
@@ -235,18 +252,23 @@ module.exports = function(grunt) {
     }
 
     var p = path.resolve(options.filename);
-    var result = execSync.exec(options.rubyHamlCommand + ' ' + p);
-    if (result.code !== 0) {
-      grunt.fail.warn(
-        "Error executing haml on " + p + ": \n" +
-        result.stderr + "\n" +
-        result.stdout
-      );
-    }
-    output = result.stdout;
-    if (options.wrapHtmlInJs) {
-      output = wrapIt(htmlescape(output), options);
-    }
-    return output;
+    var command = options.rubyHamlCommand + ' ' + p;
+    var result = exec(command, function(error, stdout, stderr) {
+      if (result.error) {
+        grunt.fail.warn(
+          "Error executing haml on " + p + ": \n" +
+          stderr + "\n" +
+          stdout
+        );
+      }
+
+      output = stdout;
+
+      if (options.wrapHtmlInJs) {
+        output = wrapIt(htmlescape(output), options);
+      }
+
+      callback(output);
+    });
   };
 };
