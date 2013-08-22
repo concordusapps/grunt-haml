@@ -1,3 +1,8 @@
+v0.7.0:
+  date: 2013-08-22
+  changes:
+    - Replace execSync with proper use of exec.
+
 v0.6.1:
   date: 2013-08-12
   changes:

@@ -214,6 +214,7 @@ haml: {
 
 ## Release History
 
+ * 2013-08-21   v0.7.0   Replace execSync with proper use of exec.
  * 2013-08-11   v0.6.1   Update version of haml-coffee 1.11.x
  * 2013-08-06   v0.6.0   Add 'precompile', 'includePath', and 'pathRelativeTo' option @leahciMic
  * 2013-05-27   v0.5.0   Add 'ruby' as a language option Update version of haml-coffee 1.10.x
@@ -232,4 +233,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Mon Aug 12 2013 15:45:11.*
+*This file was generated on Thu Aug 22 2013 00:15:10.*
