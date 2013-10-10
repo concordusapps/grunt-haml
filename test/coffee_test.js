@@ -43,6 +43,13 @@ exports.coffee = {
     }
 
     testSetups.push({
+      actual: grunt.file.read('tmp/coffee_html_partial/haml.html'),
+      expected: grunt.file.read('test/expected/coffee_html_partial/haml.html'),
+      language: 'coffee',
+      target: 'html'
+    });
+
+    testSetups.push({
       actual: grunt.file.read('tmp/ruby_html_wrapped/haml.html'),
       expected: grunt.file.read('test/expected/ruby_html_wrapped/haml.html'),
       language: 'ruby',

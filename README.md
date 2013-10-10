@@ -214,6 +214,7 @@ haml: {
 
 ## Release History
 
+ * 2013-10-09   v0.8.0   Update version of haml-coffee 1.13.x Rendering to HTML with partials now works correctly
  * 2013-08-21   v0.7.0   Replace execSync with proper use of exec.
  * 2013-08-11   v0.6.1   Update version of haml-coffee 1.11.x
  * 2013-08-06   v0.6.0   Add 'precompile', 'includePath', and 'pathRelativeTo' option @leahciMic
@@ -233,4 +234,4 @@ haml: {
 
 Task submitted by [Ryan Leckey](https://github.com/mehcode)
 
-*This file was generated on Thu Aug 22 2013 00:15:10.*
+*This file was generated on Thu Oct 10 2013 09:46:09.*

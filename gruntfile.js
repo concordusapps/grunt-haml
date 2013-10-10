@@ -91,6 +91,18 @@ module.exports = function(grunt) {
           ]
         }
       },
+      'coffee_html_partial': {
+        options: {
+          language: 'coffee',
+          context: {
+            'greet': 'Morgan Freeman',
+            'class': 'still alive'
+          }
+        },
+        files: {
+          'tmp/coffee_html_partial/haml.html': 'test/fixtures/coffee/coffee4.haml',
+        }
+      },
       'js_js': {
         options: { target: 'js', includePath: true, pathRelativeTo: './test/' },
         files: {

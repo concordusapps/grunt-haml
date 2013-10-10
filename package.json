@@ -1,7 +1,7 @@
 {
   "name": "grunt-haml",
   "description": "Process HAML templates to precompiled JavaScript or rendered HTML.",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "homepage": "https://github.com/concordusapps/grunt-haml",
   "author": {
     "name": "Concordus Applications"
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "haml": "0.4.x",
-    "haml-coffee": "1.11.x"
+    "haml-coffee": "1.13.x"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "0.1.x",
