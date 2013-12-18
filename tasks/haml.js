@@ -262,6 +262,14 @@ module.exports = function(grunt) {
         );
       }
 
+      if (stderr) {
+        grunt.log.warn(
+          "Error executing haml on " + p + ": \n" +
+          stderr + "\n" +
+          stdout
+        );
+      }
+
       output = stdout;
 
       if (options.wrapHtmlInJs) {
