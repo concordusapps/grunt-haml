@@ -92,9 +92,9 @@ window.HAML['apple'] =  function(locals) {
 
 #### context
 Type: ```object```
-Default: {}
+Default: ```{}```
 
-Set variables that can be evaluated within the haml templates.
+Set variables that can be evaluated within haml templates.
 
 The haml file:
 
@@ -110,7 +110,7 @@ Would compile to
 
     <h1>hello Morgan Freeman</h1>
 
-*Defined only for target == 'html'
+*Defined only for target == 'html'*
 
 
 #### dependencies
