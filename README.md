@@ -89,6 +89,30 @@ window.HAML['apple'] =  function(locals) {
 
 *Defined only for target == 'js' and placement == 'global'.*
 
+
+#### context
+Type: ```object```
+Default: {}
+
+Set variables that can be evaluated within the haml templates.
+
+The haml file:
+
+    %h1= "hello #{ @greet }"
+
+With the configuration
+
+    context: {
+      'greet': 'Morgan Freeman'
+    }
+
+Would compile to
+
+    <h1>hello Morgan Freeman</h1>
+
+*Defined only for target == 'html'
+
+
 #### dependencies
 Type: ```object```
 Default: ```{}```
