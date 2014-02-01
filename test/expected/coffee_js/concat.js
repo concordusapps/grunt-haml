@@ -39,7 +39,7 @@
       };
       $o = [];
       $o.push("<article>\n  <h1>" + ($e($c("hello " + this.greet))) + "</h1>\n  <section id='note'>I've an id</section>\n  <div class='" + (['am', 'i', "" + ($e($c(this["class"])))].sort().join(' ').replace(/^\s+|\s+$/g, '')) + "'>I've three* classes</div>\n</article>");
-      return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
+      return $o.join("\n").replace(/\s([\w-]+)='true'/mg, ' $1').replace(/\s([\w-]+)='false'/mg, '').replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(context);
   };
 
