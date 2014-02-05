@@ -254,7 +254,7 @@ module.exports = function(grunt) {
     var p = path.resolve(options.filename);
     var command = options.rubyHamlCommand + ' ' + p;
     var result = exec(command, function(error, stdout, stderr) {
-      if (error) {
+      if (result.error || error) {
         grunt.fail.warn(
           "Error executing haml on " + p + ": \n" +
           stderr + "\n" +
