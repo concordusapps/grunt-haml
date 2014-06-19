@@ -37,7 +37,7 @@ module.exports = function(grunt) {
       pathRelativeTo: './',
 
       // External haml command to execute, must accept STDIN
-      rubyHamlCommand: 'haml -t ugly',
+      rubyHamlCommand: 'bundle exec haml -t ugly',
 
       // Precompile templates; if false (and target == 'js'), place rendered
       // HTML in js variables.
