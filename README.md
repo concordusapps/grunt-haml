@@ -210,6 +210,12 @@ window.HAML['templates/example']
 
 *Defined only `placement == 'global'`.*
 
+#### batchLimit
+Type: ```number```
+Default: ```20```
+
+The maximum number of asynchronous transpiling processes simultaneously running at any time.   
+
 ### Usage examples
 
 ``` javascript
