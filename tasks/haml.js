@@ -9,7 +9,7 @@ module.exports = function(grunt) {
   'use strict';
 
   var path = require('path');
-  var async = grunt.util.async;
+  var async = require('async');
   var _    = grunt.util._;
 
   grunt.registerMultiTask('haml', 'Compile Haml files', function() {
@@ -41,7 +41,10 @@ module.exports = function(grunt) {
 
       // Precompile templates; if false (and target == 'js'), place rendered
       // HTML in js variables.
-      precompile: true
+      precompile: true,
+      
+      // The maximum number of asynchronous transpiling processes simultaneously running at any time   
+      batchLimit: 20  
 
     });
 
@@ -52,7 +55,7 @@ module.exports = function(grunt) {
     grunt.verbose.writeflags(options, 'Options');
 
     // Transpile each src/dest group of files.
-    async.forEach(this.files, function(file, callback) {
+    async.eachLimit(this.files, options.batchLimit, function(file, callback) {
       var opts;
       // Get only files that are actually there.
       var validFiles = file.src.filter(function(filepath) {
