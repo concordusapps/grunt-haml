@@ -9,7 +9,7 @@ module.exports = function(grunt) {
   'use strict';
 
   var path = require('path');
-  var async = grunt.util.async;
+  var async = require('async');
   var _    = grunt.util._;
 
   grunt.registerMultiTask('haml', 'Compile Haml files', function() {
@@ -41,7 +41,11 @@ module.exports = function(grunt) {
 
       // Precompile templates; if false (and target == 'js'), place rendered
       // HTML in js variables.
-      precompile: true
+      precompile: true,
+
+      // Limit the number of workers to this number when running the task
+      // Default is twice the number of CPUs
+      workers: require('os').cpus().length * 2
 
     });
 
@@ -52,7 +56,7 @@ module.exports = function(grunt) {
     grunt.verbose.writeflags(options, 'Options');
 
     // Transpile each src/dest group of files.
-    async.forEach(this.files, function(file, callback) {
+    async.eachLimit(this.files, options.workers, function(file, callback) {
       var opts;
       // Get only files that are actually there.
       var validFiles = file.src.filter(function(filepath) {
@@ -92,7 +96,7 @@ module.exports = function(grunt) {
         };
 
         // Transpile each file.
-        async.map(validFiles, processFile, function (err, results) {
+        async.mapLimit(validFiles, options.workers, processFile, function (err, results) {
           // Write the new file.
           grunt.file.write(file.dest, results.join('\n'));
           grunt.log.writeln('File ' + file.dest.cyan + ' created.');

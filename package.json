@@ -27,6 +27,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
+    "async": "^0.9.0",
     "haml": "0.4.x",
     "haml-coffee": "1.14.x"
   },
