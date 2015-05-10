@@ -210,6 +210,15 @@ window.HAML['templates/example']
 
 *Defined only `placement == 'global'`.*
 
+#### workers
+Type: ```number```
+Default: ```twice the number of CPUs```
+
+Limit the number of workers when running the task
+
+Set this to 1 if you want the task to be executed
+serially.
+
 ### Usage examples
 
 ``` javascript
