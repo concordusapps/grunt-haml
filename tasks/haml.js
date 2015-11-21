@@ -39,6 +39,9 @@ module.exports = function(grunt) {
       // External haml command to execute, must accept STDIN
       rubyHamlCommand: 'haml -t ugly',
 
+      // Options passed into calls to exec
+      execOptions: {},
+
       // Precompile templates; if false (and target == 'js'), place rendered
       // HTML in js variables.
       precompile: true
@@ -253,7 +256,7 @@ module.exports = function(grunt) {
 
     var p = path.resolve(options.filename);
     var command = options.rubyHamlCommand + ' ' + p;
-    var result = exec(command, function(error, stdout, stderr) {
+    var result = exec(command, options.execOptions, function(error, stdout, stderr) {
       if (result.error || error) {
         grunt.fail.warn(
           "Error executing haml on " + p + ": \n" +
