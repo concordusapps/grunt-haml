@@ -1,7 +1,7 @@
 {
   "name": "grunt-haml",
   "description": "Process HAML templates to precompiled JavaScript or rendered HTML.",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "homepage": "https://github.com/concordusapps/grunt-haml",
   "author": {
     "name": "Concordus Applications"

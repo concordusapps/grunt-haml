@@ -178,6 +178,12 @@ HAML file will be passed as the last command-line argument.
 
 *Defined only for language == 'ruby'
 
+#### execOptions
+Type: ```object```
+Default: ```{}```
+
+Allows passing options into calls made to exec.
+
 #### includePath
 Type: ```boolean```
 Default: ```false```
@@ -237,7 +243,8 @@ haml: {
 
 
 ## Release History
-
+ 
+ * 2015-11-20   v0.9.1   Support passing options into calls to exec.
  * 2013-10-09   v0.8.0   Update version of haml-coffee 1.13.x Rendering to HTML with partials now works correctly
  * 2013-08-21   v0.7.0   Replace execSync with proper use of exec.
  * 2013-08-11   v0.6.1   Update version of haml-coffee 1.11.x
