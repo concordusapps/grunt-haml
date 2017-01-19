@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   'use strict';
 
   var path = require('path');
+  var os = require('os');
   var async = grunt.util.async;
   var _    = grunt.util._;
 
@@ -52,7 +53,7 @@ module.exports = function(grunt) {
     grunt.verbose.writeflags(options, 'Options');
 
     // Transpile each src/dest group of files.
-    async.forEach(this.files, function(file, callback) {
+    async.forEachLimit(this.files, os.cpus().length, function(file, callback) {
       var opts;
       // Get only files that are actually there.
       var validFiles = file.src.filter(function(filepath) {
